@@ -49,7 +49,7 @@ module ExecSql
             @logger.notice("mysql < %s: OK, status=%d", st)
           else
             @logger.error("mysql < %s: NG, status=%d, out=%s", st,
-                          so.readlines.join
+                          so.readlines.join)
           end
 
           st

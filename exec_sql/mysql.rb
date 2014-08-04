@@ -44,18 +44,21 @@ module ExecSql
           IO.foreach(f) {|l| si << l}
           si.close_write
 
+          so.each_line {|l|
+            @logger.error("mysql < %s: %s", f, l.chomp) if l =~ /ERROR/
+          }
+
           st = th.value
           if st.success?
             @logger.notice("mysql < %s: OK, status=%d", f, st)
           else
-            @logger.error("mysql < %s: NG, status=%d, out=%s", f, st,
-                          so.readlines.join)
+            @logger.error("mysql < %s: NG, status=%d", f, st)
           end
 
           st
         }
       }.find {|st|
-        st.success?
+        ! st.success?
       }
 
       if status.nil? || status.success?

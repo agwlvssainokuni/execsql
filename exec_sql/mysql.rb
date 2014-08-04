@@ -33,7 +33,7 @@ module ExecSql
       @logger = Logger.new("EXECSQL[MySQL]")
       @logger.debug("start")
 
-      argv = ["--default-extra-file", @conf]
+      argv = ["--defaults-extra-file=#{@conf}"]
       argv << "--force" if force
 
       files = files.lazy unless force
@@ -46,9 +46,9 @@ module ExecSql
 
           st = th.value
           if st.success?
-            @logger.notice("mysql < %s: OK, status=%d", st)
+            @logger.notice("mysql < %s: OK, status=%d", f, st)
           else
-            @logger.error("mysql < %s: NG, status=%d, out=%s", st,
+            @logger.error("mysql < %s: NG, status=%d, out=%s", f, st,
                           so.readlines.join)
           end
 
@@ -60,10 +60,10 @@ module ExecSql
 
       if status.nil? || status.success?
         @logger.debug("end normally")
-        return 0
+        return true
       else
         @logger.debug("end abnormally")
-        return status
+        return false
       end
     end
 

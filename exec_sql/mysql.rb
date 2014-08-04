@@ -45,14 +45,16 @@ module ExecSql
           si.close_write
 
           so.each_line {|l|
-            @logger.error("mysql < %s: %s", f, l.chomp) if l =~ /ERROR/
+            if l =~ /ERROR/
+              @logger.error("mysql %s < %s: %s", argv * " ", f, l.chomp)
+            end
           }
 
           st = th.value
           if st.success?
-            @logger.notice("mysql < %s: OK, status=%d", f, st)
+            @logger.notice("mysql %s < %s: OK, status=%d", argv * " ", f, st)
           else
-            @logger.error("mysql < %s: NG, status=%d", f, st)
+            @logger.error("mysql %s < %s: NG, status=%d", argv * " ", f, st)
           end
 
           st

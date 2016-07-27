@@ -52,7 +52,7 @@ module ExecSql
 
           st = th.value
           if st.success?
-            @logger.notice("mysql %s < %s: OK, status=%d", argv * " ", f, st)
+            @logger.info("mysql %s < %s: OK, status=%d", argv * " ", f, st)
           else
             @logger.error("mysql %s < %s: NG, status=%d", argv * " ", f, st)
           end
